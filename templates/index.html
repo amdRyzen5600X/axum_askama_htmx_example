@@ -1,0 +1,47 @@
+{% block index %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <title>hiiii</title>
+</head>
+
+<body>
+    <form>
+        <input type="text" name="title" />
+        <button hx-post="/" hx-trigger="click submit" hx-target="#todos" hx-swap="afterbegin">submit</button>
+    </form>
+    <div>{{todos|safe}}</div>
+</body>
+
+</html>
+{% endblock %}
+
+{% block todos %}
+<ul id="todos">
+    {% for todo in todos %}
+    {{todo|safe}}
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block todo %}
+<li id="_{{id}}">
+    {% if done %}
+    <p><s>{{title}}</s></p>
+    {% else %}
+    <p>{{title}}</p>
+    {% endif %}
+    <button hx-put="/{{id}}" hx-target="#_{{id}}" hx-swap="outerHTML">
+    {% if done %}
+        undone
+    {% else %}
+        done
+    {% endif %}
+    </button>
+    <button hx-delete="/{{id}}" hx-target="#_{{id}}" hx-swap="outerHTML">delete</button>
+</li>
+{% endblock %}
